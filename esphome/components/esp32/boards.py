@@ -495,6 +495,21 @@ ESP32_BOARD_PINS = {
         "SS": 18,
         "Vext": 21,
     },
+    "heltec_wifi_lora_32_V3": {
+        "BUTTON": 0,
+        "DIO0": 26,
+        "DIO1": 35,
+        "DIO2": 34,
+        "LED": 25,
+        "MOSI": 27,
+        "RST_LoRa": 14,
+        "RST_OLED": 16,
+        "SCK": 5,
+        "SCL_OLED": 15,
+        "SDA_OLED": 4,
+        "SS": 18,
+        "Vext": 21,
+    },
     "heltec_wireless_stick": {
         "BUTTON": 0,
         "DIO0": 26,
@@ -1465,6 +1480,10 @@ BOARDS = {
     "heltec_wifi_lora_32_V2": {
         "name": "Heltec WiFi LoRa 32 (V2)",
         "variant": VARIANT_ESP32,
+    },
+    "heltec_wifi_lora_32_V3": {
+        "name": "Heltec WiFi LoRa 32 (V3)",
+        "variant": VARIANT_ESP32S3,
     },
     "heltec_wireless_stick_lite": {
         "name": "Heltec Wireless Stick Lite",

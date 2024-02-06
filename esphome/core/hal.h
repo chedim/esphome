@@ -31,6 +31,8 @@
 
 #endif
 
+#include <cstdint>
+
 namespace esphome {
 
 void yield();
