@@ -25,6 +25,7 @@ CONFIG_SCHEMA = cv.All(
 
 hex_pattern = re.compile(r"[A-Fa-f0-9]+")
 
+
 async def to_code(config):
     var = cg.new_Pvariable(config[CONF_ID])
     await cg.register_component(var, config)

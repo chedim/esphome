@@ -17,12 +17,14 @@ SMSPComponent = smsp_ns.class_("SMSPComponent")
 FCController = fc_ns.class_("FCController")
 MQTTMSPComponent = mqttmsp_ns.class_("MQTTMSPComponent")
 
-CONFIG_SCHEMA = cv.Schema({
-    cv.GenerateID(): cv.declare_id(DroneComponent),
-    cv.Optional(RADIO): cv.use_id(SMSPComponent),
-    cv.Optional(CONTROLLER): cv.use_id(FCController),
-    cv.Optional(MQTT): cv.use_id(MQTTMSPComponent)
-}).extend(cv.COMPONENT_SCHEMA)
+CONFIG_SCHEMA = cv.Schema(
+    {
+        cv.GenerateID(): cv.declare_id(DroneComponent),
+        cv.Optional(RADIO): cv.use_id(SMSPComponent),
+        cv.Optional(CONTROLLER): cv.use_id(FCController),
+        cv.Optional(MQTT): cv.use_id(MQTTMSPComponent),
+    }
+).extend(cv.COMPONENT_SCHEMA)
 
 
 async def to_code(config):
@@ -33,7 +35,7 @@ async def to_code(config):
     if RADIO in config:
         radio = await cg.get_variable(config[RADIO])
         cg.add(var.set_radio(radio))
-        cg.add_define("DRONE_USE_RADIO") 
+        cg.add_define("DRONE_USE_RADIO")
 
     if CONTROLLER in config:
         fc = await cg.get_variable(config[CONTROLLER])
@@ -44,4 +46,3 @@ async def to_code(config):
         cg.add_define("DRONE_USE_MQTT")
         mqtt = await cg.get_variable(config[MQTT])
         cg.add(var.set_mqtt(mqtt))
-

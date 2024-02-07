@@ -78,6 +78,10 @@ class UARTComponent {
   // @param tx_pin Pointer to the internal GPIO pin used for transmission.
   void set_tx_pin(InternalGPIOPin *tx_pin) { this->tx_pin_ = tx_pin; }
 
+  InternalGPIOPin* get_tx_pin() { return this->tx_pin_; }
+
+  InternalGPIOPin* get_rx_pin() { return this->rx_pin_; }
+
   // Sets the RX (receive) pin for the UART bus.
   // @param rx_pin Pointer to the internal GPIO pin used for reception.
   void set_rx_pin(InternalGPIOPin *rx_pin) { this->rx_pin_ = rx_pin; }

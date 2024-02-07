@@ -10,13 +10,13 @@ FCController = fc_ns.class_("FCController", cg.Component, uart.UARTComponent)
 uart_ns = cg.esphome_ns.namespace("uart")
 UARTComponent = uart_ns.class_("UARTComponent")
 
-CONFIG_SCHEMA = cv.Schema({
-    cv.GenerateID(): cv.declare_id(FCController),
-}).extend(uart.UART_DEVICE_SCHEMA)
+CONFIG_SCHEMA = cv.Schema(
+    {
+        cv.GenerateID(): cv.declare_id(FCController),
+    }
+).extend(uart.UART_DEVICE_SCHEMA)
 
 
 async def to_code(config):
     var = cg.new_Pvariable(config[CONF_ID])
-    uart = await cg.get_variable(config[CONF_UART_ID])
-    cg.add(var.set_uart(uart))
-    await cg.register_component(var, config)
+    await uart.register_uart_device(var, config)

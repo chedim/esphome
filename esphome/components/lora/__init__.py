@@ -28,7 +28,7 @@ Frequencies = lora_ns.enum("Frequencies")
 FREQUENCIES = {
     "433": Frequencies.FREQUENCY433,
     "866": Frequencies.FREQUENCY866,
-    "915": Frequencies.FREQUENCY915
+    "915": Frequencies.FREQUENCY915,
 }
 
 ModeName = lora_ns.enum("ModeName")
@@ -60,6 +60,7 @@ def aes128_key(value):
         raise cv.Invalid(f"The value for AES-128 key is invalid: '{value}'")
     return hex_string(value)
 
+
 def hex_byte(value):
     if len(value) != 2:
         raise cv.Invalid(f"The value for a hex_byte is invalid: '{value}'")
@@ -73,16 +74,16 @@ CONFIG_SCHEMA = cv.Schema(
         cv.Required(MODE): cv.one_of(*MODE_NAMES),
         cv.Required(FREQUENCY): cv.one_of(*FREQUENCIES),
         cv.Required(SECRET_KEY): aes128_key,
-
         cv.Optional(SS_PIN, 18): cv.int_,
         cv.Optional(RESET_PIN, 14): cv.int_,
         cv.Optional(DIO0_PIN, 26): cv.int_,
         cv.Optional(SPI_FREQUENCY, 10000000): cv.int_,
-        cv.Optional(SYNC_WORD, "42"): hex_byte
+        cv.Optional(SYNC_WORD, "42"): hex_byte,
     }
 )
 
 hex_pattern = re.compile(r"[A-Fa-f0-9]+")
+
 
 async def to_code(config):
     var = cg.new_Pvariable(config[CONF_ID])
