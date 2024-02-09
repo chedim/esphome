@@ -6,7 +6,7 @@
 namespace esphome {
 namespace mqtt_msp {
 struct message {
-  uint8_t msgid;
+  uint16_t msgid;
   std::string payload;
   uint8_t version;
 };
@@ -16,8 +16,8 @@ class MQTTMSPComponent : public esphome::Component, public mqtt::CustomMQTTDevic
   void setup() override;
   void dump_config() override;
   void on_mqtt_message(ArduinoJson::JsonObject message);
-  bool recv(uint8_t &version, uint8_t &messageID, uint8_t *payload, uint8_t maxSize, uint8_t &recvSize);
-  void send(uint8_t version, uint8_t messageID, uint8_t *payload, uint8_t size);
+  bool recv(uint8_t &version, uint16_t &messageID, uint8_t *payload, uint16_t maxSize, uint16_t &recvSize);
+  void send(uint8_t version, uint16_t messageID, uint8_t *payload, uint16_t size);
   void set_drone_id(char *id) {
       this->drone_id = id;
   };

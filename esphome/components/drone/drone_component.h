@@ -11,6 +11,8 @@
 #include "esphome/components/mqtt_msp/mqttmsp_component.h"
 #endif
 
+#define MAX_MSPV2_SIZE 65535
+
 namespace esphome {
 namespace drone {
 static const char *TAG = "drone";
@@ -50,6 +52,11 @@ class DroneComponent : public esphome::Component {
   uint8_t dyn_throttle_pid;
   uint8_t throttle_mid;
   uint8_t throttle_expo;
+
+  uint8_t msp_version;
+  uint16_t msp_msgid;
+  uint8_t msp_payload[MAX_MSPV2_SIZE];
+  uint16_t msp_size;
 };
 }  // namespace drone
 }  // namespace esphome

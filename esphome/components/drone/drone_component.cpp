@@ -36,70 +36,64 @@ void DroneComponent::setup() {
 }
 
 void DroneComponent::loop() {
-  msp_packet_t packet;
-  uint8_t version;
-  uint8_t msgid;
-  uint8_t *payload = (uint8_t *) malloc(255);
-  uint8_t size;
 #ifdef DRONE_USE_CONTROLLER
   if (this->controller->ready()) {
     this->controller->loop();
     // read message from controller and send it to radio and mqtt, if set
-    if (this->controller->recv(version, msgid, payload, 255, size)) {
-      std::string payloadStr((const char *) payload, size);
-      ESP_LOGI(TAG, "Received msp (v: %c) message %d(%d) from controller: %s", version, msgid, size, payloadStr);
+    if (this->controller->recv(this->msp_version, this->msp_msgid, this->msp_payload, MAX_MSPV2_SIZE, this->msp_size)) {
+      std::string payloadStr((const char *) this->msp_payload, this->msp_size);
+      ESP_LOGI(TAG, "Received msp (v: %c) message %d(%d) from controller: %s", this->msp_version, this->msp_msgid, this->msp_size, payloadStr);
 #ifdef DRONE_USE_RADIO
-      this->radio->send(version, msgid, payload, size);
+      this->radio->send(this->msp_version, this->msp_msgid, this->msp_payload, this->msp_size);
 #endif
 #ifdef DRONE_USE_MQTT
       ESP_LOGI(TAG, "forwarding to mqtt");
-      this->mqtt->send(version, msgid, payload, size);
+      this->mqtt->send(this->msp_version, this->msp_msgid, this->msp_payload, this->msp_size);
 #endif
     }
   }
 #endif
 #ifdef DRONE_USE_RADIO
   // read messages from radio and send it to fc and mqtt, if set
-  if (this->radio->recv(version, msgid, payload, 255, size)) {
+  if (this->radio->recv(this->msp_version, this->msp_msgid, this->msp_payload, MAX_MSPV2_SIZE, this->msp_size)) {
 #ifdef DRONE_USE_CONTROLLER
     if (this->controller->ready()) {
       ESP_LOGV(TAG, "forwarding to UART");
-      this->controller->send(version, msgid, payload, size);
+      this->controller->send(this->msp_version, this->msp_msgid, this->msp_payload, this->msp_size);
     } else {
       ESP_LOGW(TAG, "dropping MSP packet: controller not ready");
     }
 #endif
 #ifdef DRONE_USE_MQTT
-    this->mqtt->send(version, msgid, payload, size);
+    this->mqtt->send(this->msp_version, this->msp_msgid, this->msp_payload, this->msp_size);
 #endif
   }
 #endif
 #ifdef DRONE_USE_MQTT
   // read message from mqtt and send it to radio and fc, if set
-   if (this->mqtt->recv(version, msgid, payload, 255, size)) {
-     ESP_LOGV(TAG, "mqtt msp (v: %c) received packet %d(%d): %s", version, msgid, size, payload);
+   if (this->mqtt->recv(this->msp_version, this->msp_msgid, this->msp_payload, 255, this->msp_size)) {
+     ESP_LOGV(TAG, "mqtt msp (v: %c) received packet %d(%d): %s", this->msp_version, this->msp_msgid, this->msp_size, this->msp_payload);
 #ifdef DRONE_USE_CONTROLLER
      if (this->controller->ready()) {
        ESP_LOGV(TAG, "forwarding to UART");
-       this->controller->send(version, msgid, payload, size);
+       this->controller->send(this->msp_version, this->msp_msgid, this->msp_payload, this->msp_size);
      } else {
        ESP_LOGW(TAG, "dropping MSP packet: controller not ready");
      }
 #endif
 #ifdef DRONE_USE_RADIO
-   this->radio.send(version, msgid, payload, size);
+   this->radio.send(this->msp_version, this->msp_msgid, this->msp_payload, this->msp_size);
 #endif
 #ifndef DRONE_USE_CONTROLLER
 #ifndef DRONE_USE_RADIO
    ESP_LOGD(TAG, "debug mode -> echoing mqtt msp packet back");
-   this->mqtt->send(version, msgid, payload, size);
+   this->mqtt->send(this->msp_version, this->msp_msgid, this->msp_payload, this->msp_size);
 #endif
 #endif
    } else {
 //     ESP_LOGVV(TAG, "no new mqtt msp packets received");
    }
 #endif
-   free(payload);
 }
 
 void DroneComponent::dump_config() {

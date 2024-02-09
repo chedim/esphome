@@ -36,7 +36,7 @@ void esphome::mqtt_msp::MQTTMSPComponent::dump_config() {
   // ESP_LOGCONFIG(TAG, "MQTT_MSP drone id: '%s'", this->drone_id);
 }
 
-bool esphome::mqtt_msp::MQTTMSPComponent::recv(uint8_t &version, uint8_t &messageID, uint8_t *payload, uint8_t maxSize, uint8_t &recvSize) {
+bool esphome::mqtt_msp::MQTTMSPComponent::recv(uint8_t &version, uint16_t &messageID, uint8_t *payload, uint16_t maxSize, uint16_t &recvSize) {
   if (this->messages.size() == 0) {
     return false;
   }
@@ -69,7 +69,7 @@ bool esphome::mqtt_msp::MQTTMSPComponent::recv(uint8_t &version, uint8_t &messag
   return true;
 }
 
-void esphome::mqtt_msp::MQTTMSPComponent::send(uint8_t version, uint8_t messageID, uint8_t * payload, uint8_t size) {
+void esphome::mqtt_msp::MQTTMSPComponent::send(uint8_t version, uint16_t messageID, uint8_t * payload, uint16_t size) {
   publish_json(this->topic_out, [=](JsonObject message) {
     // 4*(n/3)
     int encodedSize = ((4 * size / 3) + 3) & ~3;

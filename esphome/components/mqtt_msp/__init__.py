@@ -19,5 +19,5 @@ CONFIG_SCHEMA = cv.All(
 async def to_code(config):
     var = cg.new_Pvariable(config[CONF_ID])
     cg.add_library("reefwing-software/ReefwingMSP", "^2.0.0")
-    cg.add_library("densaugeo/base64", "^1.4.0");
+    cg.add_library("densaugeo/base64", "^1.4.0")
     await cg.register_component(var, config)
