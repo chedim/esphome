@@ -40,20 +40,16 @@ CONFIG_SCHEMA = cv.Schema(
     {
         cv.GenerateID(): cv.declare_id(FCController),
         cv.Optional(PITCH_SENSOR): sensor.sensor_schema(
-            icon=ICON_EMPTY,
-            **pitch_roll_yaw_throttle_sensor_schema
+            icon=ICON_EMPTY, **pitch_roll_yaw_throttle_sensor_schema
         ),
         cv.Optional(ROLL_SENSOR): sensor.sensor_schema(
-            icon=ICON_EMPTY,
-            **pitch_roll_yaw_throttle_sensor_schema
+            icon=ICON_EMPTY, **pitch_roll_yaw_throttle_sensor_schema
         ),
         cv.Optional(YAW_SENSOR): sensor.sensor_schema(
-            icon=ICON_EMPTY,
-            **pitch_roll_yaw_throttle_sensor_schema
+            icon=ICON_EMPTY, **pitch_roll_yaw_throttle_sensor_schema
         ),
         cv.Optional(THROTTLE_SENSOR): sensor.sensor_schema(
-            icon=ICON_EMPTY,
-            **pitch_roll_yaw_throttle_sensor_schema
+            icon=ICON_EMPTY, **pitch_roll_yaw_throttle_sensor_schema
         ),
     }
 ).extend(uart.UART_DEVICE_SCHEMA)

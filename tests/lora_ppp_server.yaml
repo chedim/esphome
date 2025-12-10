@@ -1,0 +1,74 @@
+esphome:
+  name: lora_gateway
+
+esp32:
+  board: heltec_wifi_lora_32_V3
+  variant: esp32s3
+  framework:
+    type: arduino
+    version: 2.0.9
+    platform_version: 6.3.0
+
+# Enable logging
+logger:
+  level: VERBOSE
+  logs:
+    mqtt: DEBUG
+    sensor: INFO
+    component: ERROR
+
+# Enable Home Assistant API
+api:
+  password: ""
+
+ota:
+  password: ""
+
+wifi:
+  ssid: "cyborg"
+  password: "solskjaer"
+  power_save_mode: light
+  reboot_timeout: 0s
+  ap:
+    ssid: echo1
+    password: solskjaer
+
+mqtt:
+  id: mqtt_1
+  broker: sudo.boats
+  username: chedim
+  password: 9o99njcF
+  reboot_timeout: 0s
+
+switch:
+  - platform: restart
+    name: "Restart RX board"
+
+esp32_ble_beacon:
+  type: iBeacon
+  uuid: 561579d3-9d12-49e5-98d3-fe4c1217aba4
+
+sensor:
+  - platform: wifi_signal # Reports the WiFi signal strength/RSSI in dB
+    name: "WiFi Signal dB"
+    id: wifi_signal_db
+    update_interval: 60s
+    entity_category: "diagnostic"
+
+  - platform: copy # Reports the WiFi signal strength in %
+    source_id: wifi_signal_db
+    name: "WiFi Signal Percent"
+    filters:
+      - lambda: return min(max(2 * (x + 100.0), 0.0), 100.0);
+    unit_of_measurement: "Signal %"
+    entity_category: "diagnostic"
+    device_class: ""
+  - platform: uptime
+    name: Uptime Sensor
+
+lora:
+  mode: GATEWAY
+  frequency: 915
+  secret_key: cX/IBndOYI3zmBtrLveDL8G5/4g1sILA98Sr1ol9XzY=
+
+lora_ppp:

@@ -3,6 +3,7 @@
 #include "lora/LoRa.h"
 #include <array>
 #include <algorithm>
+#include "lwip.h"
 
 namespace esphome {
 namespace lora {
